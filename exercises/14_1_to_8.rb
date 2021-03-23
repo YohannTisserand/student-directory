@@ -1,6 +1,7 @@
 require 'csv'
 @students = []
 @default_file = "students.csv"
+puts __FILE__
 
 def save_students
   puts "Name of the file, please: (press enter for a default name)"
