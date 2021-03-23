@@ -5,19 +5,19 @@ def input_students
  
   while true do
     puts "-- Name please: --"
-    name = gets.chomp
+    name = gets.delete("\n")
     break if name.empty?
 
     puts "-- Cohort please: --"
-    cohort = gets.chomp
+    cohort = gets.delete("\n")
     cohort = "" if cohort.empty?
 
     puts "-- Hobbie please: --"
-    hobbie = gets.chomp
+    hobbie = gets.delete("\n")
     hobbie = "be evil" if hobbie.empty?
 
     puts "-- Height please: --"
-    height =  gets.chomp
+    height =  gets.delete("\n")
     height = "" if height.empty?
 
     students << {name: name, cohort: cohort, hobbie: hobbie, height: height}
@@ -38,15 +38,20 @@ def print(students)
   end
 =end
   x = 0
+  puts "-- Enter a cohort, please: --"
+  month = gets.delete("\n")
   while x < students.length do
-    i = x + 1
-    puts "#{i}- #{students[x][:name]} (#{students[x][:cohort]} cohort) | Hobbie: #{students[x][:hobbie]} | Height: #{students[x][:height]}"
+    if month == students[x][:cohort]
+      i = x + 1
+      puts "#{i}- #{students[x][:name]} (#{students[x][:cohort]} cohort) | Hobbie: #{students[x][:hobbie]} | Height: #{students[x][:height]}"
+    end
     x += 1
   end
 end
 
 def print_footer(students)
-  puts "Overall, we have #{students.count} great students"
+  puts students.length > 1 ? "Overall, we have #{students.count} great students" : "Overall, we have #{students.count} great student"
+  puts "Empty list" if students.length == 0
 end
 
 students = input_students
