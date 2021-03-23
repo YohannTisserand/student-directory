@@ -19,7 +19,7 @@ def load_students
   puts "Name of the file to load please: "
   file_to_load = STDIN.gets.chomp
   file_to_load.empty? ? file_to_load = @default_file : file_to_load += ".csv"
-  CSV.foreach(file_to_load, "r") do |row|
+  CSV.foreach(file_to_load) do |row|
     name = row.first
     cohort = row.pop
     add_students(name, cohort)
@@ -50,7 +50,7 @@ def load_student_file_on_start
   filename = ARGV.first
   return if filename.nil?
   if File.exists?(filename)
-    load_students(filename)
+    load_students
     puts "=== Loaded #{@students.count} from #{filename} ==="
   else
     puts "=== Sorry, #{filename} doesn't exist. ==="
