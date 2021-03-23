@@ -2,24 +2,30 @@
 @default_file = "students.csv"
 
 def save_students
-  file = File.open(@default_file, "w")
+  puts "Name of the file, please: (press enter for a default name)"
+  name_file = STDIN.gets.chomp
+  name_file.empty? ? name_file = @default_file : name_file += ".csv"
+  file = File.open(name_file, "w")
   @students.each do |student|
     student_data = [student[:name], student[:cohort]]
     csv_line = student_data.join(", ")
     file.puts csv_line
-    puts "Saved"
   end
   file.close
+  puts "=== Saved ==="
 end
 
-def load_students(filename = @default_file)
-  file = File.open(filename, "r")
+def load_students
+  puts "Name of the file to load please: "
+  file_to_load = STDIN.gets.chomp
+  file_to_load.empty? ? file_to_load = @default_file : file_to_load += ".csv"
+  file = File.open(file_to_load, "r")
   file.readlines.each do |line|
     name, cohort = line.chomp.split(",")
     add_students(name, cohort)
-    puts "File loaded!"
   end
   file.close
+  puts "=== File loaded! ==="
 end
 
 def add_students(name, cohort)
@@ -29,14 +35,15 @@ end
 def input_students
   puts "Please enter the names of the students"
   puts "To finish, just hit return twice"
-  name = STDIN.gets.chomp
-  cohort = STDIN.gets.chomp
-  while !name.empty? do
-    add_students(name, cohort)
-    puts "Student Added!"
+  while true do
     puts "Now we have #{@students.count} students"
+    puts "=== Name: ==="
     name = STDIN.gets.chomp
+    break if name.empty?
+    puts "=== cohort: ==="
     cohort = STDIN.gets.chomp
+    puts "=== Student Added! ==="
+    add_students(name, cohort)
   end
 end
 
@@ -45,9 +52,9 @@ def load_student_file_on_start
   return if filename.nil?
   if File.exists?(filename)
     load_students(filename)
-    puts "Loaded #{@students.count} from #{filename}"
+    puts "=== Loaded #{@students.count} from #{filename} ==="
   else
-    puts "Sorry, #{filename} doesn't exist."
+    puts "=== Sorry, #{filename} doesn't exist. ==="
     exit
   end
 end
@@ -60,11 +67,11 @@ def interactive_menu
 end
 
 def print_menu
-  puts "1. Input the students"
-  puts "2. Show the students"
-  puts "3. Save the list to students.csv"
-  puts "4. Load the list from students.csv"
-  puts "9. Exit"
+  puts "=== 1. Input the students ==="
+  puts "=== 2. Show the students ==="
+  puts "=== 3. Save the list to students.csv ==="
+  puts "=== 4. Load the list from students.csv ==="
+  puts "=== 9. Exit ===" 
 end
 
 def process(selection)
@@ -80,7 +87,7 @@ def process(selection)
   when "9"
     exit
   else
-    "Invalid command. Try again."
+    "=== Invalid command. Try again. ==="
   end
 end
 
@@ -91,7 +98,7 @@ def show_students
 end
 
 def print_header
-  puts "The students of Villains Academy"
+  puts "=== The students of Villains Academy ==="
   puts "-------------"
 end
 
@@ -100,7 +107,7 @@ def print_students_list
 end
 
 def print_footer
-  puts "Overall, we have #{@students.count} great students"
+  puts "=== Overall, we have #{@students.count} great students ==="
 end
 
 load_student_file_on_start
