@@ -1,3 +1,4 @@
+require 'csv'
 @students = []
 @default_file = "students.csv"
 
@@ -5,13 +6,11 @@ def save_students
   puts "Name of the file, please: (press enter for a default name)"
   name_file = STDIN.gets.chomp
   name_file.empty? ? name_file = @default_file : name_file += ".csv"
-  file = File.open(name_file, "w")
-  @students.each do |student|
-    student_data = [student[:name], student[:cohort]]
-    csv_line = student_data.join(", ")
-    file.puts csv_line
+  CSV.open(name_file, "w") do |f|
+    @students.each do |student|
+      f << student_data = [student[:name], student[:cohort]]
+    end
   end
-  file.close
   puts "=== Saved ==="
 end
 
@@ -19,12 +18,11 @@ def load_students
   puts "Name of the file to load please: "
   file_to_load = STDIN.gets.chomp
   file_to_load.empty? ? file_to_load = @default_file : file_to_load += ".csv"
-  file = File.open(file_to_load, "r")
-  file.readlines.each do |line|
-    name, cohort = line.chomp.split(",")
+  CSV.foreach(file_to_load, "r") do |row|
+    name = row.first
+    cohort = row.pop
     add_students(name, cohort)
-  end
-  file.close
+  end 
   puts "=== File loaded! ==="
 end
 
@@ -86,6 +84,7 @@ def process(selection)
     load_students
   when "9"
     exit
+    puts "Bye!"
   else
     "=== Invalid command. Try again. ==="
   end
