@@ -2,13 +2,12 @@
 @default_file = "students.csv"
 
 def save_students
-  #open the file for writing
   file = File.open(@default_file, "w")
-  # iterate over the array of student
   @students.each do |student|
     student_data = [student[:name], student[:cohort]]
     csv_line = student_data.join(", ")
     file.puts csv_line
+    puts "Saved"
   end
   file.close
 end
@@ -18,6 +17,7 @@ def load_students(filename = @default_file)
   file.readlines.each do |line|
     name, cohort = line.chomp.split(",")
     add_students(name, cohort)
+    puts "File loaded!"
   end
   file.close
 end
@@ -33,13 +33,14 @@ def input_students
   cohort = STDIN.gets.chomp
   while !name.empty? do
     add_students(name, cohort)
+    puts "Student Added!"
     puts "Now we have #{@students.count} students"
     name = STDIN.gets.chomp
     cohort = STDIN.gets.chomp
   end
 end
 
-def try_load_students
+def load_student_file_on_start
   filename = ARGV.first
   return if filename.nil?
   if File.exists?(filename)
@@ -102,5 +103,5 @@ def print_footer
   puts "Overall, we have #{@students.count} great students"
 end
 
-try_load_students
+load_student_file_on_start
 interactive_menu
